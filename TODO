@@ -1,0 +1,4 @@
+- Find a proper and efficient internal representation for the grid
+- De-recurse the backtrack algo: use an std::stack
+- Generate only valid candidates
+- Multithread the search to perform on multi-core
