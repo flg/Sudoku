@@ -2,6 +2,7 @@
 #include "backtrack.h"
 
 #include <iostream>
+#include <time.h>
 
 void usage()
 {
@@ -16,6 +17,27 @@ void usage()
     std::cout << "8 . 5 . . 1 . 7 ." << std::endl;
     std::cout << ". . . . . 4 . . 2" << std::endl;
     std::cout << "7 . . 3 9 . . . ." << std::endl;
+}
+
+struct timespec timespec_subtract (struct  timespec  time1, struct  timespec  time2)
+{
+    struct timespec result ;
+
+    if ((time1.tv_sec < time2.tv_sec) ||
+            ((time1.tv_sec == time2.tv_sec) &&
+             (time1.tv_nsec <= time2.tv_nsec))) {		/* TIME1 <= TIME2? */
+        result.tv_sec = result.tv_nsec = 0 ;
+    } else {						/* TIME1 > TIME2 */
+        result.tv_sec = time1.tv_sec - time2.tv_sec ;
+        if (time1.tv_nsec < time2.tv_nsec) {
+            result.tv_nsec = time1.tv_nsec + 1000000000L - time2.tv_nsec ;
+            --result.tv_sec ;				/* Borrow a second. */
+        } else {
+            result.tv_nsec = time1.tv_nsec - time2.tv_nsec ;
+        }
+    }
+
+    return (result) ;
 }
 
 int main(int argc, char** argv)
@@ -33,8 +55,14 @@ int main(int argc, char** argv)
     std::cout << "Problem:\n" << s << std::endl;
 
     Backtrack<TSudoku> backtrack(std::cout);
-    backtrack(s);
 
+    struct timespec ts0, ts1;
+    clock_gettime(CLOCK_MONOTONIC, &ts0);
+    backtrack(s);
+    clock_gettime(CLOCK_MONOTONIC, &ts1);
+
+    struct timespec result = timespec_subtract(ts1, ts0);
+    std::cout << "Search duration: " << result.tv_sec << "," << result.tv_nsec << "s.\n";
     unsigned nb_cand = backtrack.getNbCandidate();
     std::cout << "Explored " << nb_cand << " candidate" << (nb_cand > 1 ? "s\n" : "\n");
     unsigned nb_sol = backtrack.getNbSolution();
