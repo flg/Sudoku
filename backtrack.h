@@ -52,7 +52,7 @@ void Backtrack<T>::operator()(T & candidate)
     ++_NbCandidate;
 
     if (!candidate.is_valid()) {
-        TRACE("not valid\n");
+        TRACE("not valid");
         return;
     }
 
