@@ -61,10 +61,11 @@ int main(int argc, char** argv)
     backtrack(s);
     clock_gettime(CLOCK_MONOTONIC, &ts1);
 
+    // Print some stats
     struct timespec result = timespec_subtract(ts1, ts0);
-    std::cout << "Search duration: " << result.tv_sec << "," << result.tv_nsec << "s.\n";
     unsigned nb_cand = backtrack.getNbCandidate();
-    std::cout << "Explored " << nb_cand << " candidate" << (nb_cand > 1 ? "s\n" : "\n");
+    std::cout << "Explored " << nb_cand << (nb_cand > 1 ? " candidates" : " candidate");
+    std::cout << " in " << result.tv_sec << "," << result.tv_nsec << "s.\n";
     unsigned nb_sol = backtrack.getNbSolution();
     std::cout << "Found " << nb_sol << " solution" << (nb_sol > 1 ? "s\n" : "\n");
 
