@@ -7,7 +7,7 @@
 
 template <typename T, unsigned N>
 Sudoku<T, N>::Sudoku()
-    : _CurrentDigit((T*)_Grid)
+    : _CurrentDigit((T*)_Grid + N*N)
 {
     float const f = sqrt(N);
     if (f*f != N) throw std::runtime_error("N must be a perfect square");

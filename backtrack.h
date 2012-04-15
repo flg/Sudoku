@@ -31,9 +31,13 @@ private:
     Backtrack(Backtrack<T> const &);
     void operator= (Backtrack<T> const &);
 
+    void analyze_candidate();
+
     unsigned _NbSolution;
     unsigned _NbCandidate;
     std::ostream & _Output;
+
+    std::stack<T> _Candidates;
 };
 
 template <typename T>
@@ -48,36 +52,51 @@ Backtrack<T>::Backtrack(std::ostream & os)
 template <typename T>
 void Backtrack<T>::operator()(T & candidate)
 {
-    TRACE("new candidate:\n" << candidate);
+    candidate.first();
+    _Candidates.push(candidate);
+    while (!_Candidates.empty()) {
+        analyze_candidate();
+    }
+}
+
+template <typename T>
+void Backtrack<T>::analyze_candidate()
+{
+    T & candidate = _Candidates.top();
     ++_NbCandidate;
+    TRACE("new candidate:\n" << candidate);
 
-    if (!candidate.is_valid()) {
+    if (candidate.is_valid()) {
+        if (candidate.is_complete()) {
+            TRACE("solution");
+            ++_NbSolution;
+            _Output << candidate << std::endl;
+            do {
+                TRACE("generate next");
+                if (!_Candidates.top().next()) {
+                    TRACE("no more possibilities for this extension");
+                    _Candidates.pop();
+                } else {
+                    break;
+                }
+            } while (!_Candidates.empty());
+        } else {
+            TRACE("generate first");
+            _Candidates.push(candidate);
+            _Candidates.top().first();
+        }
+    } else {
         TRACE("not valid");
-        return;
+        do {
+            TRACE("generate next");
+            if (!_Candidates.top().next()) {
+                TRACE("no more possibilities for this extension");
+                _Candidates.pop();
+            } else {
+                break;
+            }
+        } while (!_Candidates.empty());
     }
-
-    if (candidate.is_complete()) {
-        // complete and valid => solution
-        TRACE("solution");
-        ++_NbSolution;
-        _Output << candidate << std::endl;
-        return;
-    }
-
-    // As this algo takes candidate as a reference, it needs to be copied before generating children. 
-    T next = candidate;
-
-    // valid and not complete: generate first extension...
-    TRACE("generate first");
-    next.first();
-
-    do {
-        //... test every possible extensions
-        operator()(next); // recurse
-        TRACE("generate next");
-    } while (next.next());
-
-    TRACE("no more possibilities for this extension");
 }
 
 #endif
