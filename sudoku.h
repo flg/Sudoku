@@ -4,6 +4,7 @@
 #include <vector>
 #include <iostream>
 #include <algorithm>
+#include <string>
 
 template <typename T = unsigned, unsigned N = 9>
 class Sudoku
