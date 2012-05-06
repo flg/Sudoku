@@ -1,4 +1,4 @@
-CXXFLAGS = -Wall -Wextra
+CXXFLAGS = -Wall -Wextra -O3
 LDFLAGS = -lrt
 
 all: sudoku
