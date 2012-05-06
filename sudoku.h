@@ -29,8 +29,7 @@ public:
 private:
     Sudoku & operator=(Sudoku const & s);
 
-    typedef T TGridLine[N];
-    typedef TGridLine TGrid[N];
+    typedef T TGrid[N][N];
 
     TGrid _Grid;
     unsigned _BlockSize;

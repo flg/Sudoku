@@ -45,7 +45,6 @@ void Sudoku<T, N>::read_from_file(std::string const & filename)
 
         iss.clear();
         iss.str(line);
-        TGridLine & grid_line = _Grid[nb_lines_read - 1];
 
         unsigned nb_digit = 0;
         char digit;
@@ -64,7 +63,7 @@ void Sudoku<T, N>::read_from_file(std::string const & filename)
             } else {
                 digit = 0;
             }
-            grid_line[nb_digit - 1] = digit;
+            _Grid[nb_lines_read - 1][nb_digit - 1] = digit;
         }
 
         if (nb_digit < N) {

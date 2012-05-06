@@ -57,9 +57,9 @@ int main(int argc, char** argv)
     Backtrack<TSudoku> backtrack(std::cout);
 
     struct timespec ts0, ts1;
-    clock_gettime(CLOCK_MONOTONIC, &ts0);
+    clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &ts0);
     backtrack(s);
-    clock_gettime(CLOCK_MONOTONIC, &ts1);
+    clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &ts1);
 
     // Print some stats
     struct timespec result = timespec_subtract(ts1, ts0);
