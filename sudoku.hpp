@@ -88,12 +88,12 @@ void Sudoku<T, N>::read_from_file(std::string const & filename)
         for (unsigned C = 0; C < N; ++C) {
             if (_Grid[L][C] == 0) {
                 _CurrentDigit = ((T*)_Grid) + (L*N + C);
-                goto first_missing_digit_fount;
+                goto first_missing_digit_found;
             }
         }
     }
 
-first_missing_digit_fount:
+first_missing_digit_found:
     (void)_CurrentDigit;
 }
 
